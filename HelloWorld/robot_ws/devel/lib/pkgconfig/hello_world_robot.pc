@@ -1,0 +1,8 @@
+prefix=/home/peter/ros-robot-control/HelloWorld/robot_ws/devel
+
+Name: hello_world_robot
+Description: Description of hello_world_robot
+Version: 1.2.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: rospy std_msgs sensor_msgs geometry_msgs nav_msgs message_runtime

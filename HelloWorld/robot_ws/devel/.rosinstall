@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/peter/ros-robot-control/HelloWorld/robot_ws/devel/setup.sh
