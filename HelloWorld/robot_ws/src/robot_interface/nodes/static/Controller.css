@@ -1,0 +1,38 @@
+.square {
+    background: #fff;
+    border: none;
+    float: left;
+    font-size: 24px;
+    font-weight: bold;
+    line-height: 34px;
+    height: 34px;
+    margin-right: -1px;
+    margin-top: -1px;
+    padding: 0;
+    text-align: center;
+    width: 34px;
+}
+
+.square:focus {
+    outline: none;
+}
+
+.row:after {
+    clear: both;
+    content: "";
+    display: table;
+}
+
+span.id {
+    background: gray;
+    color: white;
+    font-weight: bold;
+    border: solid black;
+    padding: 10px;
+    border-radius: 15px;
+    margin: 1px;
+}
+
+.foundIds {
+    margin-top: 15px;
+}
