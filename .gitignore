@@ -1,5 +1,6 @@
 .c9
 .git
+.idea
 roboMakerLogs
 armhf_build
 armhf_bundle

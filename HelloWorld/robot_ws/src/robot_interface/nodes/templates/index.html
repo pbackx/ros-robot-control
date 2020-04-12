@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Control my robot</title>
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='Controller.css') }}">
+	</head>
+	<body>
+		{# % if name %}
+		  <h1>Hello {{ name }}!</h1>
+		{% else %}
+		  <h1>Hello, World!</h1>
+		{% endif % #}
+		<img src="{{ url_for('video_feed') }}">
+
+        <div id="reactEntry"></div>
+
+        <!-- Attach React components -->
+        <script type="text/javascript" src="{{ url_for('static', filename='bundle.js') }}"></script>
+	</body>
+</html>

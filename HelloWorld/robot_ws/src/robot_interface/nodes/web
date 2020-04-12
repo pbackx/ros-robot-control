@@ -1,0 +1,91 @@
+#!/usr/bin/env python
+
+import rospy
+from geometry_msgs.msg import Twist
+from flask import Flask
+from flask import Response
+from flask import render_template
+from flask import jsonify
+from imutils.video import VideoStream
+import imutils
+import time
+from PIL import Image
+import StringIO
+import numpy as np
+import boto3
+
+class Rotator():
+    def __init__(self):
+        self._cmd_pub = rospy.Publisher('/cmd_vel', Twist, queue_size=1)
+
+    def rotate_forever(self):
+        self.twist = Twist()
+
+        r = rospy.Rate(10)
+        while not rospy.is_shutdown():
+#            self.twist.angular.z = -0.6
+#            self._cmd_pub.publish(self.twist)
+            rospy.loginfo("Rotating robot: %s", self.twist)
+            r.sleep()
+
+class Camera():
+    def __init__(self, videoStream):
+        self.videoStream = videoStream
+        self.currentImage = self.getImage()
+        self.sagemaker = boto3.client('sagemaker-runtime', region_name='eu-west-1')
+
+    def getImage(self):
+        frame = self.videoStream.read()
+        frame = imutils.resize(frame, width=400)
+        b, g, r = frame.T
+        encodedImage = StringIO.StringIO()
+        Image.fromarray(np.array((r, g, b)).T, mode='RGB').save(encodedImage, format='jpeg')
+        return encodedImage.getvalue()
+
+    def generate(self):
+        while True:
+            self.currentImage = self.getImage()
+            yield(b'--frame\r\n' + 'Content-Type: image/jpeg\r\n\r\n' + self.currentImage + '\r\n')
+
+    def identify(self):
+        # aws sagemaker-runtime invoke-endpoint --custom-attributes $custom_atts /project/result.json
+        response = self.sagemaker.invoke_endpoint(
+            EndpointName='sample-endpoint-D9949C88-FE3B-4A2D-923E-9458FE7E9F2C-1',
+            Body=bytearray(self.currentImage),
+            ContentType='image/jpeg',
+            CustomAttributes='{"threshold": 0.2}'
+        )
+        ids = response[u'Body'].read()
+        print(ids)
+        return ids
+
+def main():
+    app = Flask(__name__)
+    # rospy.init_node('web_interface')
+
+    vs = VideoStream(usePiCamera=1).start()
+    time.sleep(2.0)
+    camera = Camera(vs)
+
+    @app.route('/')
+    def hello_world():
+        return render_template('index.html', name='Hello, World!')
+
+    @app.route('/video_feed')
+    def video_feed():
+        return Response(camera.generate(), mimetype = "multipart/x-mixed-replace; boundary=frame")
+
+    @app.route('/identify')
+    def identify():
+        return camera.identify()
+
+    app.run(host='0.0.0.0', port='5000', debug=True, threaded=True, use_reloader=False)
+
+    #try:
+    #    rotator = Rotator()
+    #    rotator.rotate_forever()
+    #except rospy.ROSInterruptException:
+    #    pass
+
+if __name__ == '__main__':
+    main()
