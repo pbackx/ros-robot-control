@@ -42,6 +42,32 @@ class RobotController extends React.Component {
         axios.get(`/robot/${direction}`)
     }
 
+    componentWillMount() {
+        document.addEventListener("keydown", e => this.keyDown(e), false);
+    }
+
+    keyDown(key) {
+        switch(key.keyCode) {
+            case 37:
+                this.move('left');
+                break;
+            case 38:
+                this.move('forward');
+                break;
+            case 39:
+                this.move('right');
+                break;
+            case 40:
+                this.move('backward');
+                break;
+            case 32:
+                if (!this.state.identifyDisabled) {
+                    this.identify();
+                }
+                break;
+        }
+    }
+
     identify() {
         this.setState({
             identifyDisabled: true,

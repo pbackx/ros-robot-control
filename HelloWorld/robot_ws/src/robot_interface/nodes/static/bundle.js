@@ -193,9 +193,41 @@
 	            _axios2.default.get('/robot/' + direction);
 	        }
 	    }, {
+	        key: 'componentWillMount',
+	        value: function componentWillMount() {
+	            var _this3 = this;
+
+	            document.addEventListener("keydown", function (e) {
+	                return _this3.keyDown(e);
+	            }, false);
+	        }
+	    }, {
+	        key: 'keyDown',
+	        value: function keyDown(key) {
+	            switch (key.keyCode) {
+	                case 37:
+	                    this.move('left');
+	                    break;
+	                case 38:
+	                    this.move('forward');
+	                    break;
+	                case 39:
+	                    this.move('right');
+	                    break;
+	                case 40:
+	                    this.move('backward');
+	                    break;
+	                case 32:
+	                    if (!this.state.identifyDisabled) {
+	                        this.identify();
+	                    }
+	                    break;
+	            }
+	        }
+	    }, {
 	        key: 'identify',
 	        value: function identify() {
-	            var _this3 = this;
+	            var _this4 = this;
 
 	            this.setState({
 	                identifyDisabled: true,
@@ -203,7 +235,7 @@
 	            });
 	            _axios2.default.get('/identify').then(function (res) {
 	                console.log(res.data);
-	                _this3.setState({
+	                _this4.setState({
 	                    identifyDisabled: false,
 	                    identifyText: "🔴",
 	                    ids: res.data
