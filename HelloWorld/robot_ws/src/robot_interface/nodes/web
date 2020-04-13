@@ -14,19 +14,21 @@ import StringIO
 import numpy as np
 import boto3
 
-class Rotator():
+class Movement():
     def __init__(self):
         self._cmd_pub = rospy.Publisher('/cmd_vel', Twist, queue_size=1)
 
-    def rotate_forever(self):
-        self.twist = Twist()
-
-        r = rospy.Rate(10)
-        while not rospy.is_shutdown():
-#            self.twist.angular.z = -0.6
-#            self._cmd_pub.publish(self.twist)
-            rospy.loginfo("Rotating robot: %s", self.twist)
-            r.sleep()
+    def move(self, direction):
+        twist = Twist()
+        if direction == 'forward':
+            twist.linear.x = 0.6
+        elif direction == 'backward':
+            twist.linear.x = -0.6
+        elif direction == 'left':
+            twist.angular.z = 0.8
+        elif direction == 'right':
+            twist.angular.z = -0.8
+        self._cmd_pub.publish(twist)
 
 class Camera():
     def __init__(self, videoStream):
@@ -61,11 +63,13 @@ class Camera():
 
 def main():
     app = Flask(__name__)
-    # rospy.init_node('web_interface')
+    rospy.init_node('web_interface')
 
     vs = VideoStream(usePiCamera=1).start()
     time.sleep(2.0)
     camera = Camera(vs)
+
+    movement = Movement()
 
     @app.route('/')
     def hello_world():
@@ -79,13 +83,13 @@ def main():
     def identify():
         return camera.identify()
 
-    app.run(host='0.0.0.0', port='5000', debug=True, threaded=True, use_reloader=False)
+    @app.route('/robot/<direction>')
+    def move(direction):
+        rospy.loginfo("Moving " + direction)
+        movement.move(direction)
+        return '', 204
 
-    #try:
-    #    rotator = Rotator()
-    #    rotator.rotate_forever()
-    #except rospy.ROSInterruptException:
-    #    pass
+    app.run(host='0.0.0.0', port='5000', debug=True, threaded=True, use_reloader=False)
 
 if __name__ == '__main__':
     main()
