@@ -108,7 +108,8 @@
 
 	        _this.state = {
 	            ids: [],
-	            identifyDisabled: false
+	            identifyDisabled: false,
+	            identifyText: "🔴"
 	        };
 	        return _this;
 	    }
@@ -122,7 +123,7 @@
 	                return _react2.default.createElement(
 	                    'span',
 	                    { className: 'id', key: key },
-	                    id
+	                    id.id
 	                );
 	            });
 	            return _react2.default.createElement(
@@ -156,7 +157,7 @@
 	                        { className: 'square', onClick: function onClick() {
 	                                return _this2.identify();
 	                            }, disabled: this.state.identifyDisabled },
-	                        '\uD83D\uDD34'
+	                        this.state.identifyText
 	                    ),
 	                    _react2.default.createElement(
 	                        'button',
@@ -196,11 +197,17 @@
 	        value: function identify() {
 	            var _this3 = this;
 
-	            this.setState({ identifyDisable: true });
+	            this.setState({
+	                identifyDisabled: true,
+	                identifyText: "⏳"
+	            });
 	            _axios2.default.get('/identify').then(function (res) {
 	                console.log(res.data);
-	                // this.setState({ids: res.data.ids});
-	                _this3.setState({ identifyDisable: false });
+	                _this3.setState({
+	                    identifyDisabled: false,
+	                    identifyText: "🔴",
+	                    ids: res.data
+	                });
 	            });
 	        }
 	    }]);

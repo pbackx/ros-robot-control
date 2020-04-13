@@ -7,12 +7,13 @@ class RobotController extends React.Component {
         super(props);
         this.state = {
             ids: [],
-            identifyDisabled: false
+            identifyDisabled: false,
+            identifyText: "🔴"
         }
     }
 
     render() {
-        var ids = this.state.ids.map((id, key) => <span className="id" key={key}>{id}</span>)
+        var ids = this.state.ids.map((id, key) => <span className="id" key={key}>{id.id}</span>)
         return <div>
             <div className="row">
                 <button className="square"/>
@@ -21,7 +22,9 @@ class RobotController extends React.Component {
             </div>
             <div className="row">
                 <button className="square" onClick={() => this.move('left')}>◀️</button>
-                <button className="square" onClick={() => this.identify()} disabled={this.state.identifyDisabled}>🔴</button>
+                <button className="square" onClick={() => this.identify()} disabled={this.state.identifyDisabled}>
+                    {this.state.identifyText}
+                </button>
                 <button className="square" onClick={() => this.move('right')}>▶️</button>
             </div>
             <div className="row">
@@ -40,12 +43,18 @@ class RobotController extends React.Component {
     }
 
     identify() {
-        this.setState({identifyDisable:true})
+        this.setState({
+            identifyDisabled: true,
+            identifyText: "⏳"
+        })
         axios.get('/identify')
             .then(res => {
                 console.log(res.data)
-                // this.setState({ids: res.data.ids});
-                this.setState({identifyDisable:false})
+                this.setState({
+                    identifyDisabled: false,
+                    identifyText: "🔴",
+                    ids: res.data
+                });
             })
     }
 }
