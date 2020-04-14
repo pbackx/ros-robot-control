@@ -16,7 +16,7 @@ So what is there:
 * A simple web interface is available to see what the robot is seeing and to control it.
 * A button will send the current camera image to SageMaker and report back what is visible on screen.
 
-... TODO add screenshot or YouTube video ...
+<iframe width="560" height="315" src="https://www.youtube.com/embed/mj5foOQ_A78" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 ## AWS services used
 
