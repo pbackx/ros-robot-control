@@ -61,7 +61,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactDom = __webpack_require__(187);
+	var _reactDom = __webpack_require__(188);
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
@@ -93,6 +93,10 @@
 
 	var _RobotFeed2 = _interopRequireDefault(_RobotFeed);
 
+	var _RobotId = __webpack_require__(187);
+
+	var _RobotId2 = _interopRequireDefault(_RobotId);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -113,8 +117,11 @@
 	        _this.state = {
 	            ids: [],
 	            identifyDisabled: false,
-	            identifyText: "🔴"
+	            identifyText: "🔴",
+	            idToDraw: null
 	        };
+	        _this.showId = _this.showId.bind(_this);
+	        _this.clear = _this.clear.bind(_this);
 	        return _this;
 	    }
 
@@ -124,16 +131,16 @@
 	            var _this2 = this;
 
 	            var ids = this.state.ids.map(function (id, key) {
-	                return _react2.default.createElement(
-	                    'span',
-	                    { className: 'id', key: key },
-	                    id.id
-	                );
+	                return _react2.default.createElement(_RobotId2.default, { tag: id.id, key: key,
+	                    onMouseOver: function onMouseOver() {
+	                        return _this2.showId(id);
+	                    },
+	                    onMouseOut: _this2.clear });
 	            });
 	            return _react2.default.createElement(
 	                'div',
 	                null,
-	                _react2.default.createElement(_RobotFeed2.default, null),
+	                _react2.default.createElement(_RobotFeed2.default, { idToDraw: this.state.idToDraw }),
 	                _react2.default.createElement(
 	                    'div',
 	                    { className: 'row' },
@@ -196,6 +203,20 @@
 	        key: 'move',
 	        value: function move(direction) {
 	            _axios2.default.get('/robot/' + direction);
+	        }
+	    }, {
+	        key: 'showId',
+	        value: function showId(id) {
+	            this.setState({
+	                idToDraw: id
+	            });
+	        }
+	    }, {
+	        key: 'clear',
+	        value: function clear() {
+	            this.setState({
+	                idToDraw: null
+	            });
 	        }
 	    }, {
 	        key: 'componentWillMount',
@@ -21605,7 +21626,7 @@
 /* 186 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -21631,16 +21652,45 @@
 	    function RobotFeed(props) {
 	        _classCallCheck(this, RobotFeed);
 
-	        return _possibleConstructorReturn(this, (RobotFeed.__proto__ || Object.getPrototypeOf(RobotFeed)).call(this, props));
+	        var _this = _possibleConstructorReturn(this, (RobotFeed.__proto__ || Object.getPrototypeOf(RobotFeed)).call(this, props));
+
+	        _this.drawRectangle = _this.drawRectangle.bind(_this);
+	        _this.clearCanvas = _this.clearCanvas.bind(_this);
+	        return _this;
 	    }
 
 	    _createClass(RobotFeed, [{
-	        key: "render",
+	        key: 'drawRectangle',
+	        value: function drawRectangle(id) {
+	            var ctx = this.refs.canvas.getContext('2d');
+	            ctx.beginPath();
+	            ctx.strokeStyle = "red";
+	            ctx.rect(id.left, id.top, id.right - id.left, id.bottom - id.top);
+	            ctx.stroke();
+	        }
+	    }, {
+	        key: 'clearCanvas',
+	        value: function clearCanvas() {
+	            var ctx = this.refs.canvas.getContext('2d');
+	            ctx.clearRect(0, 0, 400, 300);
+	        }
+	    }, {
+	        key: 'componentDidUpdate',
+	        value: function componentDidUpdate() {
+	            if (this.props.idToDraw) {
+	                this.drawRectangle(this.props.idToDraw);
+	            } else {
+	                this.clearCanvas();
+	            }
+	        }
+	    }, {
+	        key: 'render',
 	        value: function render() {
 	            return _react2.default.createElement(
-	                "div",
-	                { className: "robot-feed" },
-	                _react2.default.createElement("img", { src: window.videoFeed, alt: "The robot feed. You really need to see it." })
+	                'div',
+	                { className: 'robot-feed' },
+	                _react2.default.createElement('img', { id: 'videoFeedImg', src: window.videoFeed, alt: 'The robot feed. You really need to see it.' }),
+	                _react2.default.createElement('canvas', { id: 'videoFeedCanvas', ref: 'canvas', width: '400', height: '300' })
 	            );
 	        }
 	    }]);
@@ -21652,6 +21702,57 @@
 
 /***/ }),
 /* 187 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(3);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var RobotId = function (_React$Component) {
+	    _inherits(RobotId, _React$Component);
+
+	    function RobotId(props) {
+	        _classCallCheck(this, RobotId);
+
+	        return _possibleConstructorReturn(this, (RobotId.__proto__ || Object.getPrototypeOf(RobotId)).call(this, props));
+	    }
+
+	    _createClass(RobotId, [{
+	        key: "render",
+	        value: function render() {
+	            return _react2.default.createElement(
+	                "span",
+	                { className: "id",
+	                    onMouseOver: this.props.onMouseOver,
+	                    onMouseOut: this.props.onMouseOut },
+	                this.props.tag
+	            );
+	        }
+	    }]);
+
+	    return RobotId;
+	}(_react2.default.Component);
+
+	exports.default = RobotId;
+
+/***/ }),
+/* 188 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';

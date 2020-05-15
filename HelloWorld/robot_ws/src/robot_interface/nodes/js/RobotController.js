@@ -2,6 +2,7 @@
 import React from 'react';
 import axios from 'axios';
 import RobotFeed from "./RobotFeed";
+import RobotId from "./RobotId";
 
 class RobotController extends React.Component {
     constructor(props) {
@@ -9,14 +10,20 @@ class RobotController extends React.Component {
         this.state = {
             ids: [],
             identifyDisabled: false,
-            identifyText: "🔴"
+            identifyText: "🔴",
+            idToDraw: null
         }
+        this.showId = this.showId.bind(this);
+        this.clear = this.clear.bind(this);
     }
 
     render() {
-        var ids = this.state.ids.map((id, key) => <span className="id" key={key}>{id.id}</span>)
+        var ids = this.state.ids.map((id, key) =>
+            <RobotId tag={id.id} key={key}
+                     onMouseOver={() => this.showId(id)}
+                     onMouseOut={this.clear}/>)
         return <div>
-            <RobotFeed />
+            <RobotFeed idToDraw={this.state.idToDraw}/>
             <div className="row">
                 <button className="square"/>
                 <button className="square" onClick={() => this.move('forward')}>🔼</button>
@@ -44,12 +51,24 @@ class RobotController extends React.Component {
         axios.get(`/robot/${direction}`)
     }
 
+    showId(id) {
+        this.setState({
+            idToDraw: id
+        });
+    }
+
+    clear() {
+        this.setState({
+            idToDraw: null
+        });
+    }
+
     componentWillMount() {
         document.addEventListener("keydown", e => this.keyDown(e), false);
     }
 
     keyDown(key) {
-        switch(key.keyCode) {
+        switch (key.keyCode) {
             case 37:
                 this.move('left');
                 break;

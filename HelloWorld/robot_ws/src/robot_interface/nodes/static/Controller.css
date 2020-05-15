@@ -47,3 +47,12 @@ span.id {
     margin-top: 15px;
     text-align: center;
 }
+
+#videoFeedImg {
+    position: absolute;
+}
+
+#videoFeedCanvas {
+    position: relative;
+    z-index: 20;
+}
