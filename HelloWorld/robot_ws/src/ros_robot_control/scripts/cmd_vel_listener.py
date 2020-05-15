@@ -19,10 +19,11 @@ class StopTimer:
         self.timer.start()
 
 class Motor:
-    def __init__(self, in1, in2, en):
+    def __init__(self, in1, in2, en, multiplier=1):
         self.in1 = in1
         self.in2 = in2
         self.en = en
+        self.multiplier = multiplier
         GPIO.setup(self.in1,GPIO.OUT)
         GPIO.setup(self.in2,GPIO.OUT)
         GPIO.setup(self.en,GPIO.OUT)
@@ -39,7 +40,7 @@ class Motor:
         if speed == 0:
             self.stop()
         else:
-            pwmSpeed=min(abs(speed),1.0)*100
+            pwmSpeed=min(abs(speed),1.0)*100*self.multiplier
             rospy.loginfo(rospy.get_caller_id() + " pwm: " + str(pwmSpeed))
             self.pwm.ChangeDutyCycle(pwmSpeed)
             if speed > 0:
@@ -54,7 +55,7 @@ class MyRobot:
     def __init__(self):
         GPIO.setmode(GPIO.BCM)
         self.stopTimer = StopTimer(self.stop, 1)
-        self.left = Motor(24,25,23)
+        self.left = Motor(24,25,23,0.6)
         self.right = Motor(8,7,12)
 
     def stop(self):
@@ -66,7 +67,7 @@ class MyRobot:
             self.left.run(speed)
             self.right.run(speed)
         else:
-            rotate = rotate * 0.5
+            rotate = rotate * 0.75
             self.left.run(speed-rotate)
             self.right.run(speed+rotate)
         self.stopTimer.reset()
