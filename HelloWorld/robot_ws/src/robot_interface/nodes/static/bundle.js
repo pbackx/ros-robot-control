@@ -61,7 +61,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactDom = __webpack_require__(186);
+	var _reactDom = __webpack_require__(187);
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
@@ -88,6 +88,10 @@
 	var _axios = __webpack_require__(160);
 
 	var _axios2 = _interopRequireDefault(_axios);
+
+	var _RobotFeed = __webpack_require__(186);
+
+	var _RobotFeed2 = _interopRequireDefault(_RobotFeed);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -129,6 +133,7 @@
 	            return _react2.default.createElement(
 	                'div',
 	                null,
+	                _react2.default.createElement(_RobotFeed2.default, null),
 	                _react2.default.createElement(
 	                    'div',
 	                    { className: 'row' },
@@ -21598,6 +21603,55 @@
 
 /***/ }),
 /* 186 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(3);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var RobotFeed = function (_React$Component) {
+	    _inherits(RobotFeed, _React$Component);
+
+	    function RobotFeed(props) {
+	        _classCallCheck(this, RobotFeed);
+
+	        return _possibleConstructorReturn(this, (RobotFeed.__proto__ || Object.getPrototypeOf(RobotFeed)).call(this, props));
+	    }
+
+	    _createClass(RobotFeed, [{
+	        key: "render",
+	        value: function render() {
+	            return _react2.default.createElement(
+	                "div",
+	                { className: "robot-feed" },
+	                _react2.default.createElement("img", { src: window.videoFeed, alt: "The robot feed. You really need to see it." })
+	            );
+	        }
+	    }]);
+
+	    return RobotFeed;
+	}(_react2.default.Component);
+
+	exports.default = RobotFeed;
+
+/***/ }),
+/* 187 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';

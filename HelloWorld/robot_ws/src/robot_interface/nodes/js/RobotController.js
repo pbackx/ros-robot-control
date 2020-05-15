@@ -1,6 +1,7 @@
 // don't forget to run 'npx webpack' when changing this file
 import React from 'react';
 import axios from 'axios';
+import RobotFeed from "./RobotFeed";
 
 class RobotController extends React.Component {
     constructor(props) {
@@ -15,6 +16,7 @@ class RobotController extends React.Component {
     render() {
         var ids = this.state.ids.map((id, key) => <span className="id" key={key}>{id.id}</span>)
         return <div>
+            <RobotFeed />
             <div className="row">
                 <button className="square"/>
                 <button className="square" onClick={() => this.move('forward')}>🔼</button>

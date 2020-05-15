@@ -3,6 +3,7 @@
 	<head>
 		<title>Control my robot</title>
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='Controller.css') }}">
+        <script>window.videoFeed = "{{ url_for('video_feed') }}"</script>
 	</head>
 	<body>
 		{# % if name %}
@@ -10,8 +11,6 @@
 		{% else %}
 		  <h1>Hello, World!</h1>
 		{% endif % #}
-		<img src="{{ url_for('video_feed') }}">
-
         <div id="reactEntry"></div>
 
         <!-- Attach React components -->
