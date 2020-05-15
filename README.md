@@ -16,7 +16,7 @@ So what is there:
 * A simple web interface is available to see what the robot is seeing and to control it.
 * A button will send the current camera image to SageMaker and report back what is visible on screen.
 
-... TODO add screenshot or YouTube video ...
+[![YouTube demo](http://img.youtube.com/vi/mj5foOQ_A78/0.jpg)](http://www.youtube.com/watch?v=mj5foOQ_A78 "Find my stuff Robot")
 
 ## AWS services used
 
