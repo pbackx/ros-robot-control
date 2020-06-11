@@ -36,9 +36,23 @@ As you will have noticed, this repository was started from the HelloWorld RoboMa
 
 The robot itself is compatible with the Turtlebot that is used in the simulation (it accepts /cmd_vel messages), but I've not yet figured out how to integrate the camera.
 
+## Running the code
+
 If you want to try out the code:
 
 * You'll need a Raspberry Pi based robot with a motor controller connected to the GPIO pins and the standard Raspberry Pi camera
+* ROS Melodic running on the Raspberry Pi
+
+Follow these steps:
+
+* Install dependencies:
+  * `pip install pyyaml imutils boto3`
+* Build the workspace:
+  * `cd ~/ros-robot-control/HelloWorld/robot_ws`
+  * `catkin_make` 
+* Source the `setup.bash` script: 
+  * `echo "source /home/pi/ros-robot-control/HelloWorld/robot_ws/devel/setup.bash" >> ~/.bashrc`
+  * `source ~/.bashrc`
 * Update [cmd_vel_listener.py](https://github.com/pbackx/ros-robot-control/blob/master/HelloWorld/robot_ws/src/ros_robot_control/scripts/cmd_vel_listener.py) to reflect your configuration (most importantly lines 57 and 58 that contain the GPIO pins used to control the motors)
 * Launch the GluonCV model, pretty much as describe in the documentation and [update line 55 of the interface file to put in the correct ARN](https://github.com/pbackx/ros-robot-control/blob/master/HelloWorld/robot_ws/src/robot_interface/nodes/web#L55).
 * Now launch the [deploy_rotate.launch](https://github.com/pbackx/ros-robot-control/blob/master/HelloWorld/robot_ws/src/robot_interface/launch/deploy_rotate.launch) file using `roslaunch`.

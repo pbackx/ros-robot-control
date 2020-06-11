@@ -1,4 +1,4 @@
-prefix=/home/peter/ros-robot-control/HelloWorld/robot_ws/devel
+prefix=/home/pi/ros-robot-control/HelloWorld/robot_ws/devel
 
 Name: robot_interface
 Description: Description of robot_interface

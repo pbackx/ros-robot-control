@@ -1,8 +1,9 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 import rospy
 from geometry_msgs.msg import Twist
 from std_msgs.msg import Float64
 import RPi.GPIO as GPIO
+import serial
 from threading import Timer
 
 class StopTimer:
@@ -50,26 +51,43 @@ class Motor:
                 GPIO.output(self.in1,GPIO.LOW)
                 GPIO.output(self.in2,GPIO.HIGH)
 
- 
+class Sabertooth:
+    def __init__(self, serial_port='/dev/ttyS0', baudrate=9600, max_throttle=64):
+        self.serial = serial.Serial(serial_port, baudrate)
+        self.max_throttle = max_throttle
+
+    def stop(self):
+        self.serial.write([64, 192])
+
+    def drive(self, left, right):
+        left = max(min(left, 1.0),-1.0)
+        right = max(min(right, 1.0),-1.0)
+        left_int = 64+int(round(self.max_throttle*left))
+        right_int = 192+int(round(self.max_throttle*right))
+        command = bytearray([left_int, right_int])
+        rospy.loginfo(rospy.get_caller_id() + " sending command to Sabertooth: " + str(list(command)))
+        self.serial.write(command)
+
+
 class MyRobot:
     def __init__(self):
         GPIO.setmode(GPIO.BCM)
         self.stopTimer = StopTimer(self.stop, 1)
-        self.left = Motor(24,25,23,0.6)
-        self.right = Motor(8,7,12)
+        self.sabertooth = Sabertooth(max_throttle=48)
 
     def stop(self):
-        self.left.stop()
-        self.right.stop()
+        self.sabertooth.stop()
 
     def drive(self, speed, rotate):
-        if rotate == 0:
-            self.left.run(speed)
-            self.right.run(speed)
-        else:
-            rotate = rotate * 0.75
-            self.left.run(speed-rotate)
-            self.right.run(speed+rotate)
+        # sp = 1 + r = 0 -> both forward
+        # sp = -1 + r = 0 -> beide achteruit
+        # sp = 0 + r = 1 -> rechts vooruit, links achteruit
+        # sp = 0 + r = -1 -> rechts achteruit, links vooruit
+        # sp = 1 + r = 1 -> rechts vooruit, links stil
+
+        left = (speed + rotate) / 2
+        right = (speed - rotate) /2
+        self.sabertooth.drive(left, right)
         self.stopTimer.reset()
 
 myRobot = MyRobot()
@@ -82,9 +100,7 @@ def callback(twist):
     
 def listener():
     rospy.init_node('cmd_vel_listener', anonymous=True)
-
     rospy.Subscriber("cmd_vel", Twist, callback)
-
     rospy.spin()
 
 if __name__ == '__main__':

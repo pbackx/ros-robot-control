@@ -1,5 +1,5 @@
 <launch>
-  <node pkg="ros_robot_control" name="ros_robot_control" type="cmd_vel_listener.py">
+  <node pkg="ros_robot_control" name="ros_robot_control" type="cmd_vel_listener.py" output="screen">
     <!-- remap from="/cmd_vel" to="/turtlesim/turtle1/cmd_vel"/ -->
   </node>
   

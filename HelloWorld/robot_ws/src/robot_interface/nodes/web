@@ -21,9 +21,9 @@ class Movement():
     def move(self, direction):
         twist = Twist()
         if direction == 'forward':
-            twist.linear.x = 0.6
+            twist.linear.x = 1
         elif direction == 'backward':
-            twist.linear.x = -0.6
+            twist.linear.x = -1
         elif direction == 'left':
             twist.angular.z = 1.0
         elif direction == 'right':
