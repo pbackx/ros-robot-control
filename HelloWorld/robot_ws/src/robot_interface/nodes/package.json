@@ -12,11 +12,11 @@
   "license": "ISC",
   "devDependencies": {
     "babel-core": "^6.4.5",
-    "babel-loader": "^6.2.1",
+    "babel-loader": "^9.1.0",
     "babel-preset-es2015": "^6.3.13",
     "babel-preset-react": "^6.3.13",
     "css-loader": "^3.5.2",
-    "webpack": "^1.12.12"
+    "webpack": "^5.74.0"
   },
   "dependencies": {
     "axios": "^0.19.2",
